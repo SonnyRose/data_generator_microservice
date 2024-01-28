@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # This is one part of a massive project called "data-microservice".
 ## This part of "data_generator_microservice" performs the function of generating data for other microservices using Apache Kafka.
 
