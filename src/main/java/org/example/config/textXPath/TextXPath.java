@@ -3,8 +3,6 @@ package org.example.config.textXPath;
 import com.jcabi.xml.XML;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 
 @RequiredArgsConstructor
 public final class TextXPath {

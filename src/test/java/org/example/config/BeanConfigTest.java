@@ -3,7 +3,6 @@ package org.example.config;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
