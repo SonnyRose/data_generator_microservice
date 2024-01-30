@@ -1,39 +1,54 @@
 package org.example.service.implementation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.model.Data;
 import org.example.service.interfaces.KafkaDataService;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderRecord;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class KafkaDataServiceImpl implements KafkaDataService {
 
     private final KafkaSender<String, Object> sender;
 
+
     @Override
     public void send(Data data) {
+        if (data == null) {
+            throw new IllegalArgumentException("Data cannot be null");
+        }
         String topic = switch (data.getMeasurementType()) {
             case TEMPERATURE -> "data-temperature";
             case VOLTAGE -> "data-voltage";
             case POWER -> "data-power";
         };
-        sender.send(
-                        Mono.just(
-                                SenderRecord.create(
-                                        topic,
-                                        0,
-                                        System.currentTimeMillis(),
-                                        String.valueOf(data.hashCode()),
-                                        data,
-                                        null
-                                )
+        Flux<?> result = sender.send(
+                Mono.just(
+                        SenderRecord.create(
+                                topic,
+                                0,
+                                System.currentTimeMillis(),
+                                String.valueOf(data.hashCode()),
+                                data,
+                                null
                         )
+
                 )
-                .subscribe();
+        );
+        if (result != null) {
+            result.doOnError(Throwable::printStackTrace).subscribe();
+        } else {
+            log.error("KafkaSender.send() returned null, indicating a configuration or setup issue.");
+            // Consider additional error handling or fallback strategies here
+        }
+        }
+
     }
         //Mono - об'єкт, який інкапсулює в собі дані та відправляє їх у реактивному підході,
         // тобто не треба очікувати відповіді Kafka,
@@ -52,5 +67,4 @@ public class KafkaDataServiceImpl implements KafkaDataService {
         // (в даному випадку не використовуються, через що і null)
 
         //subscribe() - метод, який сповіщає, що повідомлення в Kafka було надіслано та коли
-    }
 
