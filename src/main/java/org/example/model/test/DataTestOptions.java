@@ -13,4 +13,5 @@ import org.example.model.measurementType.MeasurementType;
 public class DataTestOptions {
     private Integer delayInSeconds;
     private MeasurementType[] measurementTypes;
+
 }

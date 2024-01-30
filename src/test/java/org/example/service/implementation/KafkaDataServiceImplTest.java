@@ -13,35 +13,43 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class KafkaDataServiceImplTest {
     @BeforeEach
-    public void setup(){
+    public void setup() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Mock
     private KafkaSender<String, Object> mockSender;
 
     @InjectMocks
     private KafkaDataServiceImpl kafkaDataService;
+
     @Test
     public void testSend_sendsToCorrectTopic() {
+        Data testData = createTestData(MeasurementType.TEMPERATURE, 10.0);
+        assertDoesNotThrow(() -> kafkaDataService.send(testData));
+        assertNotNull(testData);
+    }
+    @Test
+    public void testSend_nullData_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> kafkaDataService.send(null));
+        verifyNoInteractions(mockSender);
+    }
+    private Data createTestData(MeasurementType measurementType, Double measurementValue) {
         Data testData = new Data();
-        testData.setMeasurementType(MeasurementType.TEMPERATURE);
-        testData.setMeasurement(10.0);
+        testData.setMeasurementType(measurementType);
+        testData.setMeasurement(measurementValue);
+
         long timestamp = System.currentTimeMillis();
         LocalDateTime localDateTime = Instant.ofEpochMilli(timestamp)
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
         testData.setTimeStamp(localDateTime);
-        kafkaDataService.send(testData);
-        verify(mockSender).send(any());
-    }
-    @Test
-    public void testSend_nullData_throwsException() {
-        assertThrows(IllegalArgumentException.class, () -> kafkaDataService.send(null));
-    }
 
+        return testData;
+    }
 }

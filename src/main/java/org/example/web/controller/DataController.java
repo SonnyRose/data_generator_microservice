@@ -1,5 +1,7 @@
 package org.example.web.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.example.model.Data;
 import org.example.model.test.DataTestOptions;
@@ -9,6 +11,7 @@ import org.example.web.DTO.DataDTO;
 import org.example.web.DTO.DataTestOptionsDTO;
 import org.example.web.mapper.DataMapper;
 import org.example.web.mapper.DataTestOptionsMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

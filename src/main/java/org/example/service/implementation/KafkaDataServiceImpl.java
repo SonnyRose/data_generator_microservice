@@ -17,16 +17,17 @@ public class KafkaDataServiceImpl implements KafkaDataService {
 
     private final KafkaSender<String, Object> sender;
 
-
     @Override
     public void send(Data data) {
         if (data == null) {
             throw new IllegalArgumentException("Data cannot be null");
         }
+        validateMeasurementValue(data);
         String topic = switch (data.getMeasurementType()) {
             case TEMPERATURE -> "data-temperature";
             case VOLTAGE -> "data-voltage";
             case POWER -> "data-power";
+            default -> throw new IllegalArgumentException("Invalid measurement type");
         };
         Flux<?> result = sender.send(
                 Mono.just(
@@ -41,14 +42,23 @@ public class KafkaDataServiceImpl implements KafkaDataService {
 
                 )
         );
+        handleSendResult(result);
+    }
+    private void validateMeasurementValue(Data data) {
+        try {
+            Double.parseDouble(String.valueOf(data.getMeasurement()));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid measurement value: " + data.getMeasurement(), e);
+        }
+    }
+    private void handleSendResult(Flux<?> result) {
         if (result != null) {
             result.doOnError(Throwable::printStackTrace).subscribe();
         } else {
             log.error("KafkaSender.send() returned null, indicating a configuration or setup issue.");
             // Consider additional error handling or fallback strategies here
         }
-        }
-
+    }
     }
         //Mono - об'єкт, який інкапсулює в собі дані та відправляє їх у реактивному підході,
         // тобто не треба очікувати відповіді Kafka,

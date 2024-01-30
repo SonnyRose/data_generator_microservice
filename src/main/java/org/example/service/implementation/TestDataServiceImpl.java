@@ -24,6 +24,9 @@ public class TestDataServiceImpl implements TestDataService {
 
     @Override
     public void sendMessage(DataTestOptions testOptions) {
+        if (testOptions.getMeasurementTypes() == null){
+            throw new IllegalArgumentException("DataTestOption or Measurement types cannot be null");
+        }
         if (testOptions.getMeasurementTypes().length > 0) {
             executorService.scheduleAtFixedRate(
                     () -> {
