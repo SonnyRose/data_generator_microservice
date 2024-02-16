@@ -37,7 +37,6 @@ public class KafkaDataServiceImpl implements KafkaDataService {
                                 data,
                                 null
                         )
-
                 )
         );
         handleSendResult(result);
