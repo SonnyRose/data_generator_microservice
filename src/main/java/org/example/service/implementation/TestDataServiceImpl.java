@@ -21,7 +21,6 @@ public class TestDataServiceImpl implements TestDataService {
     private final ScheduledExecutorService executorService
             = Executors.newSingleThreadScheduledExecutor();
     private final KafkaDataService kafkaDataService;
-
     @Override
     public void sendMessage(DataTestOptions testOptions) {
         if (testOptions.getMeasurementTypes() == null){

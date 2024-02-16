@@ -25,11 +25,9 @@ public class DataController {
     private final TestDataService testDataService;
     private final DataMapper dataMapper;
     private final DataTestOptionsMapper dataTestOptionsMapper;
-
     @PostMapping("/send")
     public void send(@RequestBody DataDTO dataDTO) {
         Data data = dataMapper.toEntity(dataDTO);
-        // перетворює з DataDTO в Data
         kafkaDataService.send(data);
     }
     @PostMapping("/test/send")

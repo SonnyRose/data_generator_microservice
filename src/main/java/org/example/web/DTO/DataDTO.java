@@ -17,5 +17,4 @@ public class DataDTO {
     private LocalDateTime timeStamp;
     private Double measurement;
     private MeasurementType measurementType;
-
 }

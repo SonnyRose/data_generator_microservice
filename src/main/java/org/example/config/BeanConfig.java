@@ -11,7 +11,6 @@ import java.util.Objects;
 
 @Configuration
 public class BeanConfig {
-
     @SneakyThrows
     @Bean
     public XML producerXml() {

@@ -14,9 +14,7 @@ import reactor.kafka.sender.SenderRecord;
 @Slf4j
 @RequiredArgsConstructor
 public class KafkaDataServiceImpl implements KafkaDataService {
-
     private final KafkaSender<String, Object> sender;
-
     @Override
     public void send(Data data) {
         if (data == null) {
@@ -56,25 +54,6 @@ public class KafkaDataServiceImpl implements KafkaDataService {
             result.doOnError(Throwable::printStackTrace).subscribe();
         } else {
             log.error("KafkaSender.send() returned null, indicating a configuration or setup issue.");
-            // Consider additional error handling or fallback strategies here
         }
     }
-    }
-        //Mono - об'єкт, який інкапсулює в собі дані та відправляє їх у реактивному підході,
-        // тобто не треба очікувати відповіді Kafka,
-        // виконавши send буде продовжуватись виконання програми,
-        // що покращує незалежність та швидкість виконання операцій
-
-        //SenderRecord - запис, який містить інформацію про повідомлення,
-        // яке має бути відправлене
-
-        // topic(1) - назва теми Kafka, на яку має бути відправлений запис
-        // partition(2) - розділ, який має бути відправлений запис
-        // timestamp(3) - відмітка часу запису
-        // key(4) - ключ запису(в даному випадку використано в якості ключа hashCode)
-        // value(5) - значення запису(в даному випадку це data)
-        // correlationMetadata (6) - додаткові метадані, які можуть бути пов'язані з записом
-        // (в даному випадку не використовуються, через що і null)
-
-        //subscribe() - метод, який сповіщає, що повідомлення в Kafka було надіслано та коли
-
+}

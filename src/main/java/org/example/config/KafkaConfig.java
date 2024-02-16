@@ -22,12 +22,9 @@ import java.util.Map;
 @Setter
 @RequiredArgsConstructor
 public class KafkaConfig {
-
         @Value("${spring.kafka.bootstrap-servers}")
         private String servers;
-
         private final XML settings;
-
         @Bean
         public NewTopic temperatureTopic() {
             return TopicBuilder.name("data-temperature")
@@ -39,7 +36,6 @@ public class KafkaConfig {
                     )
                     .build();
         }
-
         @Bean
         public NewTopic voltageTopic() {
             return TopicBuilder.name("data-voltage")
@@ -51,7 +47,6 @@ public class KafkaConfig {
                     )
                     .build();
         }
-
         @Bean
         public NewTopic powerTopic() {
             return TopicBuilder.name("data-power")
@@ -63,7 +58,6 @@ public class KafkaConfig {
                     )
                     .build();
         }
-
         @Bean
         public SenderOptions<String, Object> senderOptions() {
             Map<String, Object> props = new HashMap<>(3);
@@ -83,7 +77,6 @@ public class KafkaConfig {
             );
             return SenderOptions.create(props);
         }
-
         @Bean
         public KafkaSender<String, Object> sender(
                 SenderOptions<String, Object> senderOptions
