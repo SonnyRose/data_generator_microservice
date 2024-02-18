@@ -1,7 +1,6 @@
 package org.example.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.example.model.Data;
 import org.example.model.test.DataTestOptions;
@@ -11,7 +10,6 @@ import org.example.web.DTO.DataDTO;
 import org.example.web.DTO.DataTestOptionsDTO;
 import org.example.web.mapper.DataMapper;
 import org.example.web.mapper.DataTestOptionsMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,12 +24,12 @@ public class DataController {
     private final DataMapper dataMapper;
     private final DataTestOptionsMapper dataTestOptionsMapper;
     @PostMapping("/send")
-    public void send(@RequestBody DataDTO dataDTO) {
+    public void send(@NonNull @RequestBody DataDTO dataDTO) {
         Data data = dataMapper.toEntity(dataDTO);
         kafkaDataService.send(data);
     }
     @PostMapping("/test/send")
-    public void testSend(@RequestBody DataTestOptionsDTO testOptionDTO) {
+    public void testSend(@NonNull @RequestBody DataTestOptionsDTO testOptionDTO) {
         DataTestOptions dataTestOptions = dataTestOptionsMapper.toEntity(testOptionDTO);
         testDataService.sendMessage(dataTestOptions);
     }
