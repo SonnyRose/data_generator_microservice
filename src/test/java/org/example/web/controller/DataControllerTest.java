@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class DataControllerTest {
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
     @InjectMocks
     private DataController dataController;
     @Mock
