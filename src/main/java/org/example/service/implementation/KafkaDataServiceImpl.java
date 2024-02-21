@@ -10,6 +10,8 @@ import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderRecord;
 
+import java.util.Objects;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -17,15 +19,12 @@ public class KafkaDataServiceImpl implements KafkaDataService {
     private final KafkaSender<String, Object> sender;
     @Override
     public void send(Data data) {
-        if (data == null) {
-            throw new IllegalArgumentException("Data cannot be null");
-        }
+        Objects.requireNonNull(data, "Data cannot be null");
         validateMeasurementValue(data);
         String topic = switch (data.getMeasurementType()) {
             case TEMPERATURE -> "data-temperature";
             case VOLTAGE -> "data-voltage";
             case POWER -> "data-power";
-            default -> throw new IllegalArgumentException("Invalid measurement type");
         };
         Flux<?> result = sender.send(
                 Mono.just(

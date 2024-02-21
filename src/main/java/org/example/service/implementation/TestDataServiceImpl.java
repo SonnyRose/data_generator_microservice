@@ -9,6 +9,7 @@ import org.example.service.interfaces.TestDataService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,9 +24,8 @@ public class TestDataServiceImpl implements TestDataService {
     private final KafkaDataService kafkaDataService;
     @Override
     public void sendMessage(DataTestOptions testOptions) {
-        if (testOptions.getMeasurementTypes() == null){
-            throw new IllegalArgumentException("DataTestOption or Measurement types cannot be null");
-        }
+        Objects.requireNonNull(testOptions.getMeasurementTypes(),
+                "DataTestOption or Measurement types cannot be null");
         if (testOptions.getMeasurementTypes().length > 0) {
             executorService.scheduleAtFixedRate(
                     () -> {
@@ -59,6 +59,7 @@ public class TestDataServiceImpl implements TestDataService {
     private MeasurementType getRandomMeasurement(
             MeasurementType[] measurementTypes
     ) {
+        Objects.requireNonNull(measurementTypes, "Measurement type cannot be null");
         int randomTypeId = (int) (Math.random() * measurementTypes.length);
         return measurementTypes[randomTypeId];
     }

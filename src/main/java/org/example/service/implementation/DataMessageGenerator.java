@@ -7,6 +7,7 @@ import org.example.model.test.DataTestOptions;
 import org.example.service.interfaces.KafkaDataService;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 public class DataMessageGenerator implements Runnable {
@@ -29,9 +30,7 @@ public class DataMessageGenerator implements Runnable {
         return (Math.random() * (max - min)) + min;
     }
     private static MeasurementType getRandomMeasurementType(MeasurementType[] measurementTypes) {
-        if (measurementTypes == null) {
-            throw new IllegalArgumentException("Measurement types cannot be null");
-        }
+        Objects.requireNonNull(measurementTypes, "measurement type cannot be null");
         int randomTypeId = (int) (Math.random() * measurementTypes.length);
         return measurementTypes[randomTypeId];
     }
